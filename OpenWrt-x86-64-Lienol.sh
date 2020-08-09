@@ -7,7 +7,7 @@ cd openwrt
 # sudo -E apt-get -y install rename
 
 # 更新feeds文件
-# sed -i 's#lienol https://github.com/Lienol/openwrt-package#lienol https://github.com/db-one/Lienol-openwrt-package#g' feeds.conf.default #更换默认包源
+# sed -i 's#diy1 https://github.com/xiaorouji/openwrt-package#diy1 https://github.com/db-one/Lienol-openwrt-package#g' feeds.conf.default #更换默认包源
 sed -i 's#src-git luci https://github.com/Lienol/openwrt-luci.git;dev-17.01#src-git luci https://github.com/Lienol/openwrt-luci.git;dev-18.06#g' feeds.conf.default #更换luci版本
 cat feeds.conf.default
 
@@ -22,7 +22,7 @@ git clone https://github.com/tty228/luci-app-serverchan package/luci-app-serverc
 git clone https://github.com/garypang13/luci-theme-edge package/luci-theme-edge -b 18.06
 
 # 替换更新passwall和ssrplus+
-rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-passwall package/openwrt-packages/luci-app-passwall
+rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall package/openwrt-packages/luci-app-passwall
 rm -rf package/openwrt-packages/luci-app-ssr-plus && svn co https://github.com/fw876/helloworld package/openwrt-packages/helloworld
 
 # 自定义定制选项

@@ -25,15 +25,15 @@ git clone https://github.com/garypang13/luci-theme-edge package/luci-theme-edge 
 rm -rf package/lean/luci-theme-argon && git clone https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon -b 18.06
 
 # 替换更新passwall和ssrplus+
-rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-passwall package/openwrt-packages/luci-app-passwall
+rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall package/openwrt-packages/luci-app-passwall
 rm -rf package/openwrt-packages/luci-app-ssr-plus && svn co https://github.com/fw876/helloworld package/openwrt-packages/helloworld
 
 # 添加passwall依赖库
 # git clone https://github.com/kenzok8/small package/small
-svn co https://github.com/Lienol/openwrt-package/trunk/package package/small
+svn co https://github.com/xiaorouji/openwrt-package/trunk/package package/small
 
 # 替换更新haproxy默认版本
-rm -rf feeds/packages/net/haproxy && svn co https://github.com/Lienol/openwrt-packages/trunk/net/haproxy feeds/packages/net/haproxy
+rm -rf feeds/packages/net/haproxy && svn co https://github.com/xiaorouji/openwrt-packages/trunk/net/haproxy feeds/packages/net/haproxy
 
 # 自定义定制选项
 sed -i 's#192.168.1.1#10.0.0.1#g' package/base-files/files/bin/config_generate #定制默认IP
