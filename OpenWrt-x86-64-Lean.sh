@@ -33,7 +33,7 @@ rm -rf package/openwrt-packages/luci-app-ssr-plus && svn co https://github.com/f
 svn co https://github.com/xiaorouji/openwrt-package/trunk/package package/small
 
 # 替换更新haproxy默认版本
-rm -rf feeds/packages/net/haproxy && svn co https://github.com/xiaorouji/openwrt-packages/trunk/net/haproxy feeds/packages/net/haproxy
+rm -rf feeds/packages/net/haproxy && svn co https://github.com/lienol/openwrt-packages/trunk/net/haproxy feeds/packages/net/haproxy
 
 # 自定义定制选项
 sed -i 's#192.168.1.1#10.0.0.1#g' package/base-files/files/bin/config_generate #定制默认IP
