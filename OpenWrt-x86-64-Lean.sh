@@ -175,6 +175,7 @@ CONFIG_PACKAGE_simple-obfs=y
 CONFIG_PACKAGE_trojan-plus=y
 CONFIG_PACKAGE_trojan-go=y
 CONFIG_PACKAGE_brook=y
+CONFIG_PACKAGE_ssocks=y
 CONFIG_PACKAGE_naiveproxy=y
 CONFIG_PACKAGE_ipt2socks=y
 CONFIG_PACKAGE_shadowsocks-libev-config=y
