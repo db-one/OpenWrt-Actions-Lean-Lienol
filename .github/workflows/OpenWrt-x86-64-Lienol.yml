@@ -23,7 +23,6 @@ on:
 #  paths:
 #    - 'x86_64.config'
 
-#SSH_ACTIONS 开启SSH连接
 #UPLOAD_BIN_DIR上传BIN目录
 #UPLOAD_FIRMWARE上传固件目录
 
@@ -31,7 +30,6 @@ env:
   REPO_URL: https://github.com/Lienol/openwrt
   REPO_BRANCH: dev-19.07
   DIY_SH: OpenWrt-x86-64-Lienol.sh
-  SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   TZ: Asia/Shanghai
@@ -76,10 +74,6 @@ jobs:
         cd openwrt
         ../$DIY_SH
         make defconfig
-
-    - name: 开启SSH远程连接
-      uses: P3TERX/debugger-action@master
-      if: env.SSH_ACTIONS == 'true'
 
     - name: 下载软件包
       id: package
