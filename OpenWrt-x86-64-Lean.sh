@@ -29,6 +29,7 @@ rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/x
 rm -rf package/openwrt-packages/luci-app-ssr-plus && svn co https://github.com/fw876/helloworld package/openwrt-packages/helloworld
 
 # 添加passwall依赖库
+rm -rf package/lean/v2ray
 # git clone https://github.com/kenzok8/small package/small
 svn co https://github.com/xiaorouji/openwrt-package/trunk/package package/small
 
