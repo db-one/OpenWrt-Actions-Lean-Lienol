@@ -28,7 +28,7 @@ on:
 
 env:
   REPO_URL: https://github.com/Lienol/openwrt
-  REPO_BRANCH: dev-19.07
+  REPO_BRANCH: 19.07
   DIY_SH: OpenWrt-x86-64-Lienol.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -65,7 +65,7 @@ jobs:
     - name: 更改时区、生成编译时间
       run: |
         sudo timedatectl set-timezone "$TZ"
-        echo "::set-env name=FILENAME::$(date "+%m-%d %H.%M")"
+        echo "::set-output name=FILENAME::$(date "+%m-%d %H.%M")"
 
     - name: 更新源并创建配置文件
       run: |

@@ -65,7 +65,7 @@ jobs:
     - name: 更改时区、生成编译时间
       run: |
         sudo timedatectl set-timezone "$TZ"
-        echo "::set-env name=FILENAME::$(date "+%m-%d %H.%M")"
+        echo "::set-output name=FILENAME::$(date "+%m-%d %H.%M")"
 
     - name: 更新源并创建配置文件
       run: |
