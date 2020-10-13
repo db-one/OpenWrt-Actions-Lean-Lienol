@@ -108,19 +108,26 @@ jobs:
     - name: 整理文件
       run: |
         mkdir -p ./artifact/firmware
+        mkdir -p ./artifact/vmware
         mkdir -p ./artifact/package
         mkdir -p ./artifact/buildinfo
         rm -rf $(find openwrt/bin/targets/ -type d -name "packages")
         cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ./artifact/package/
         cp -rf $(find openwrt/bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
         cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*img*") ./artifact/firmware/
-        cp -rf $(find openwrt/bin/targets/ -type f -name "*efi*img*") ./artifact/firmware/
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*vmdk*") ./artifact/vmware/
 
     - name: 上传固件
       uses: actions/upload-artifact@v2
       with:
         name: OpenWrt-firmware-Lean-${{ env.FILE_DATE }}
         path: ./artifact/firmware/
+
+    - name: 上传vmware镜像
+      uses: actions/upload-artifact@v2
+      with:
+        name: OpenWrt-vmware-Lean-${{ env.FILE_DATE }}
+        path: ./artifact/vmware/
 
     - name: 上传插件包
       uses: actions/upload-artifact@v2

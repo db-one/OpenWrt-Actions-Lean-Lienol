@@ -101,6 +101,12 @@ CONFIG_PACKAGE_ipv6helper=y
 CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
 EOF
 
+# 编译VMware镜像以及镜像填充
+cat >> .config <<EOF
+CONFIG_VMDK_IMAGES=y
+CONFIG_TARGET_IMAGES_PAD=y
+EOF
+
 # 多文件系统支持:
 # cat >> .config <<EOF
 # CONFIG_PACKAGE_kmod-fs-nfs=y
@@ -268,6 +274,7 @@ EOF
 cat >> .config <<EOF
 CONFIG_HAS_FPU=y
 EOF
+
 
 # 
 # ========================固件定制部分结束========================
