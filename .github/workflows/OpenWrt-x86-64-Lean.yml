@@ -1,3 +1,11 @@
+# 
+# <https://github.com/KFERMercer/OpenWrt-CI>
+#
+# Copyright (C) 2019 P3TERX
+#
+# Copyright (C) 2020 KFERMercer
+#
+
 
 name: OpenWrt-x86-64-Lean
 
@@ -23,26 +31,24 @@ on:
 #  paths:
 #    - 'x86_64.config'
 
-#UPLOAD_BIN_DIR上传BIN目录
-#UPLOAD_FIRMWARE上传固件目录
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   DIY_SH: OpenWrt-x86-64-Lean.sh
-  UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
   TZ: Asia/Shanghai
 
 jobs:
   build_openwrt:
     name: 编译OpenWrt固件
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: 校验本地文件
       uses: actions/checkout@v2
+      with:
+        ref: master
 
     - name: 初始化编译环境
       env:
@@ -62,10 +68,12 @@ jobs:
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
-    - name: 更改时区、生成编译时间
+    - name: 更新时区、编译时间
+      id: date
       run: |
         sudo timedatectl set-timezone "$TZ"
-        echo "::set-output name=FILENAME::$(date "+%m-%d %H.%M")"
+        echo "::set-output name=status::success"
+        echo "FILE_DATE=$(date +"%m-%d %H.%M")" >> $GITHUB_ENV
 
     - name: 更新源并创建配置文件
       run: |
@@ -76,38 +84,55 @@ jobs:
         make defconfig
 
     - name: 下载软件包
-      id: package
       run: |
         cd openwrt && make download -j8
-        find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
     - name: 编译固件
-      id: compile
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 V=s
-        echo "::set-output name=status::success"
+        make -j$(nproc) || make -j1 || make -j1 V=s
 
-    - name: 上传BIN目录
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
-      with:
-        name: OpenWrt-bin-Lean-${{ env.FILENAME }}
-        path: openwrt/bin
+    - name: 检查空间使用情况
+      run: |
+        echo "======================="
+        echo "Space usage:"
+        echo "======================="
+        df -hT
+        echo "======================="
+        du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
+        du -h --max-depth=1 openwrt/build_dir
+        du -h --max-depth=1 openwrt/bin
 
     - name: 整理文件
-      id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-          rm -rf ./artifact/
-          mkdir -p ./artifact/
-          find openwrt/bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./artifact/
-          find openwrt/bin/targets/ -name "*uefi*img*" | xargs -i mv -f {} ./artifact/
+        mkdir -p ./artifact/firmware
+        mkdir -p ./artifact/package
+        mkdir -p ./artifact/buildinfo
+        rm -rf $(find openwrt/bin/targets/ -type d -name "packages")
+        cp -rf $(find openwrt/bin/packages/ -type f -name "*.ipk") ./artifact/package/
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*combined*img*") ./artifact/firmware/
+        cp -rf $(find openwrt/bin/targets/ -type f -name "*efi*img*") ./artifact/firmware/
 
     - name: 上传固件
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v2
       with:
-        name: OpenWrt-firmware-Lean-${{ env.FILENAME }}
-        path: ./artifact/
+        name: OpenWrt-firmware-Lean-${{ env.FILE_DATE }}
+        path: ./artifact/firmware/
+
+    - name: 上传插件包
+      uses: actions/upload-artifact@v2
+      with:
+        name: OpenWrt-package-Lean-${{ env.FILE_DATE }}
+        path: ./artifact/package/
+
+    - name: 上传固件信息
+      uses: actions/upload-artifact@v2
+      with:
+        name: OpenWrt-buildinfo-Lean-${{ env.FILE_DATE }}
+        path: ./artifact/buildinfo/
+
+
+
