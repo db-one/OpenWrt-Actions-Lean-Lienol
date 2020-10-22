@@ -40,7 +40,7 @@ env:
 
 jobs:
   build_openwrt:
-    name: 编译OpenWrt固件
+    name: OpenWrt-x86-64-Lienol
     if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-latest
 
