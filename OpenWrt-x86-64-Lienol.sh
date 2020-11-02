@@ -1,8 +1,6 @@
 
 #!/bin/bash
 
-cd openwrt
-
 # 安装额外依赖软件包
 # sudo -E apt-get -y install rename
 
@@ -11,15 +9,15 @@ cd openwrt
 sed -i 's#src-git luci https://github.com/Lienol/openwrt-luci.git;17.01#src-git luci https://github.com/Lienol/openwrt-luci.git;18.06#g' feeds.conf.default #更换luci版本
 cat feeds.conf.default
 
-# 更新并安装源
-./scripts/feeds clean
-./scripts/feeds update -a && ./scripts/feeds install -a
-
 # 添加第三方软件包
 git clone https://github.com/kenzok8/openwrt-packages package/openwrt-packages
 git clone https://github.com/destan19/OpenAppFilter package/OpenAppFilter
 git clone https://github.com/tty228/luci-app-serverchan package/luci-app-serverchan
 git clone https://github.com/garypang13/luci-theme-edge package/luci-theme-edge -b 18.06
+
+# 更新并安装源
+./scripts/feeds clean
+./scripts/feeds update -a && ./scripts/feeds install -a
 
 # 替换更新passwall和ssrplus+
 rm -rf package/openwrt-packages/luci-app-passwall && svn co https://github.com/xiaorouji/openwrt-package/trunk/lienol/luci-app-passwall package/openwrt-packages/luci-app-passwall
